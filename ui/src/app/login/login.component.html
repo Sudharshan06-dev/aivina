@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aivina - Agile Project Management Tool</title>
+</head>
+<body>
+<!-- Floating Background Elements -->
+<div class="floating-element" id="element1">Sprint Planning</div>
+<div class="floating-element" id="element2">User Stories</div>
+<div class="floating-element" id="element3">Team Management</div>
+<div class="floating-element" id="element4">Epic Breakdown</div>
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100 py-5">
+  <div class="flip-container w-100">
+    <div #flipper class="flipper">
+      <!-- Sign Up Form (Front) -->
+      <div class="front p-4">
+        <div class="text-center mb-4">
+          <div class="logo-icon d-inline-flex align-items-center justify-content-center mb-3">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h1 class="fs-2 fw-bold text-dark mb-2">Aivina</h1>
+          <p class="text-muted">Your Intelligent Agile Companion</p>
+        </div>
+
+        <form>
+          <div class="mb-3">
+            <label class="form-label text-secondary small fw-medium">Email</label>
+            <input type="email" class="form-control form-control-lg" placeholder="Enter your email" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-secondary small fw-medium">Username</label>
+            <input type="text" class="form-control form-control-lg" placeholder="Choose a username" required>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label text-secondary small fw-medium">Password</label>
+            <input type="password" class="form-control form-control-lg" placeholder="Create a strong password" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 mb-2 py-2">Get Started</button>
+          <button class="btn btn-outline-dark btn w-100 py-2" role="button">
+            <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="assets/google.png"/>
+            Sign-up with Google
+          </button>
+
+          <div class="text-center mt-4 text-muted small">
+            Already have an account? <a (click)="flipCard()" class="text-primary text-decoration-none fw-medium k-cursor-pointer">Sign in</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Sign In Form (Back) -->
+      <div class="back p-4">
+        <div class="text-center mb-4">
+          <div class="logo-icon d-inline-flex align-items-center justify-content-center mb-3">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h1 class="fs-2 fw-bold text-dark mb-2">Welcome Back</h1>
+          <p class="text-muted">Continue your agile journey</p>
+        </div>
+
+        <form>
+          <div class="mb-3">
+            <label class="form-label text-secondary small fw-medium">Username</label>
+            <input type="text" class="form-control form-control-lg" placeholder="Enter your username" required>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label text-secondary small fw-medium">Password</label>
+            <input type="password" class="form-control form-control-lg" placeholder="Enter your password" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 mb-2 py-2">Sign In</button>
+          <button class="btn btn-outline-dark btn w-100 py-2" role="button">
+            <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+            Sign-in with Google
+          </button>
+
+          <div class="text-center mt-4 text-muted small">
+            Need an account? <a (click)="flipCard()" class="text-primary text-decoration-none fw-medium k-cursor-pointer">Sign up</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
