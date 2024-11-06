@@ -1,15 +1,17 @@
 export const LABELS = {
     COMMON : {
         sprint_planning: 'Sprint Planning',
-        user_stories: 'User Stories',
+        user_stories: 'Users Stories',
         team_management: 'Team Management',
         epic_breakdown: 'Epic Breakdown',
         email: 'Email',
         username: 'Username',
         password: 'Password',
+        confirm_password: 'Confirm Password'
     },
 
     LOGIN : {
+        fullName: "First and last name",
         get_started: 'Get Started',
         welcome_back: 'Welcome Back',
         continue_agile: 'Continue your agile journey',

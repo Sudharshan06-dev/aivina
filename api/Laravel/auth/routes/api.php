@@ -11,7 +11,7 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
-    Route::post('/register-user', [OAuthController::class, 'registerUser']);
-    Route::post('/login-user', [OAuthController::class, 'loginUser']);
+    Route::post('/register-user', [OAuthController::class, 'postRegisterUser']);
+    Route::post('/login-user', [OAuthController::class, 'postHandleUserLogin']);
 
 });

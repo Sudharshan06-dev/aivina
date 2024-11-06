@@ -8,10 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable
+class Users extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
+
+
+    protected $connection = 'meta'; // Specify the connection name here
 
     /**
      * The attributes that are mass assignable.
@@ -19,9 +22,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'lastname',
+        'username',
         'email',
         'password',
+        'remember_token',
+        'is_active',
+        'created_at',
+        'updated_at',
+        'is_deleted'
     ];
 
     /**
@@ -32,6 +42,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'is_deleted'
     ];
 
     /**

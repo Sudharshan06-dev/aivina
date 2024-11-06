@@ -8,5 +8,13 @@
 
 body {
   min-height: 100vh;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg,  #8b5cf6 0%, #6366f1 100%);
+}
+
+.required {
+  color: red;
+}
+
+.form-control.is-invalid {
+  margin-bottom: 0;
 }
