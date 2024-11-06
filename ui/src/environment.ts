@@ -9,3 +9,7 @@ export const LARAVEL_ROUTE : string = 'http://localhost:8000/' + API_PREFIX;
 export const JAVA_ROUTE : string = 'http://localhost:8001/' + API_PREFIX;
 
 export const NODE_ROUTE : string = 'http://localhost:8002/' + API_PREFIX;
+
+export const PASSWORD_MINLENGTH = 8
+
+export const PASSWORD_MAXLENGTH = 15

@@ -1,65 +1,150 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{APP_TITLE}}</title>
-</head>
-<body>
 <!-- Floating Background Elements -->
-<div class="floating-element" id="element1">{{commonLabels.sprint_planning}}</div>
-<div class="floating-element" id="element2">{{commonLabels.user_stories}}</div>
-<div class="floating-element" id="element3">{{commonLabels.team_management}}</div>
-<div class="floating-element" id="element4">{{commonLabels.epic_breakdown}}</div>
+<div class="floating-element" id="element1">{{ COMMON_LABELS.sprint_planning }}</div>
+<div class="floating-element" id="element2">{{ COMMON_LABELS.user_stories }}</div>
+<div class="floating-element" id="element3">{{ COMMON_LABELS.team_management }}</div>
+<div class="floating-element" id="element4">{{ COMMON_LABELS.epic_breakdown }}</div>
 
 <div class="container d-flex align-items-center justify-content-center min-vh-100 py-5">
     <div class="flip-container w-100">
         <div #flipper class="flipper">
             <!-- Sign Up Form (Front) -->
-            <div class="front p-4">
-                <div class="text-center mb-4">
-                    <div class="logo-icon d-inline-flex align-items-center justify-content-center mb-3">
-                        <svg viewBox="0 0 24 24">
+            <div class="front">
+                <div class="text-center mb-2">
+                    <div class="logo-icon d-inline-flex align-items-center justify-content-center mb-2">
+                        <svg viewBox="0 0 24 24" style="width: 40px; height: 40px">
                             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                         </svg>
                     </div>
-                    <h1 class="fs-2 fw-bold text-dark mb-2">{{APP_TITLE}}</h1>
-                    <p class="text-muted">{{loginLabels.app_slogan}}</p>
+                    <h1 class="fs-4 fw-bold text-dark mb-1">{{ APP_TITLE }}</h1>
+                    <p class="text-muted small mb-3">{{ LOGIN_LABELS.app_slogan }}</p>
                 </div>
 
-                <form>
-                    <div class="mb-3">
-                        <label class="form-label text-secondary small fw-medium">{{commonLabels.email}}</label>
-                        <input type="email" class="form-control form-control-lg" placeholder="Enter your email"
-                               required>
+                <!-- Modified form structure -->
+                <form [formGroup]="signUpForm" (ngSubmit)="createUser()" autocomplete="off">
+
+                    <div class="input-group-wrapper mb-4">
+
+                        <div class="row g-3">
+                            <!-- First Name Field -->
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary small fw-medium mb-2" appRequiredAstrix>
+                                    First name
+                                </label>
+                                <input type="text"
+                                       name="firstname"
+                                       formControlName="firstname"
+                                       class="form-control form-control-md border-0"
+                                       [class.is-invalid]="firstname?.invalid && !firstname?.untouched"
+                                       placeholder="Enter your First name">
+                                <div class="error-message small mt-1"
+                                     *ngIf="firstname?.invalid && !firstname?.untouched">
+                                    <div *ngIf="firstname?.hasError('required')">Firstname field is mandatory</div>
+                                    <div *ngIf="firstname?.hasError('pattern')">Firstname should be only characters
+                                    </div>
+                                    <div *ngIf="firstname?.hasError('maxlength')">Firstname should be below 35
+                                        characters
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Last Name Field -->
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary small fw-medium mb-2" appRequiredAstrix>
+                                    Last name
+                                </label>
+                                <input type="text"
+                                       name="lastname"
+                                       formControlName="lastname"
+                                       class="form-control form-control-md border-0"
+                                       [class.is-invalid]="lastname?.invalid && !lastname?.untouched"
+                                       placeholder="Enter your Last name">
+                                <div class="error-message small mt-1" *ngIf="lastname?.invalid && !lastname?.untouched">
+                                    <div *ngIf="lastname?.hasError('required')">Lastname field is mandatory</div>
+                                    <div *ngIf="lastname?.hasError('pattern')">Lastname should be only characters</div>
+                                    <div *ngIf="lastname?.hasError('maxlength')">Lastname should be below 35 characters
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label text-secondary small fw-medium">{{commonLabels.username}}</label>
-                        <input type="text" class="form-control form-control-lg" placeholder="Choose a username"
-                               required>
+
+                    <div class="input-group-wrapper">
+                        <label class="form-label text-secondary small fw-medium"
+                               appRequiredAstrix>{{ COMMON_LABELS.email }}</label>
+                        <input type="email" name="email" formControlName="email"
+                               class="form-control form-control-md"
+                               [class.is-invalid]="email?.invalid && !email?.untouched"
+                               placeholder="Enter your email">
+                        <div class="error-message" *ngIf="email?.invalid && !email?.untouched">
+                            <div *ngIf="email?.hasError('required')">Email field is mandatory</div>
+                            <div *ngIf="email?.hasError('email')">Email is invalid. Please provide a valid email</div>
+                        </div>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="form-label text-secondary small fw-medium">{{commonLabels.password}}</label>
-                        <input type="password" class="form-control form-control-lg"
-                               placeholder="Create a strong password" required>
+                    <div class="input-group-wrapper">
+                        <label class="form-label text-secondary small fw-medium"
+                               appRequiredAstrix>{{ COMMON_LABELS.username }}</label>
+                        <input type="text" class="form-control form-control-md"
+                               [class.is-invalid]="initialUserName?.invalid && !initialUserName?.untouched"
+                               formControlName="username"
+                               placeholder="Choose a username">
+                        <div class="error-message" *ngIf="initialUserName?.invalid && !initialUserName?.untouched">
+                            <div *ngIf="initialUserName?.hasError('required')">Username field is mandatory</div>
+                            <div *ngIf="initialUserName?.hasError('pattern')">Username is invalid. Should contain
+                                alphabets or numbers
+                            </div>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 mb-2 py-2">{{loginLabels.get_started}}</button>
+                    <div class="input-group-wrapper">
+                        <label class="form-label text-secondary small fw-medium"
+                               appRequiredAstrix>{{ COMMON_LABELS.password }}</label>
+
+                        <div class="password-input">
+                            <input #createPassword type="password"
+                                   formControlName="password"
+                                   class="form-control form-control-md"
+                                   [class.is-invalid]="initialPassword?.invalid && !initialPassword?.untouched"
+                                   placeholder="Create a strong password">
+
+                            <span *ngIf="createPassword.type == 'password'" (click)="createPassword.type = 'text'">
+                                     <img width="15px" alt="view password" src="/eye.png"/>
+                            </span>
+
+                            <span *ngIf="createPassword.type == 'text'" (click)="createPassword.type = 'password'">
+                                <img width="15px" alt="hide password" src="/hidden.png"/>
+                            </span>
+
+                        </div>
+
+                        <div class="error-message" *ngIf="initialPassword?.invalid && !initialPassword?.untouched">
+                            <div *ngIf="initialPassword?.hasError('required')">Password field is mandatory</div>
+                            <div *ngIf="initialPassword?.hasError('minlength')">Password should contain
+                                at-least {{ PASSWORD_MINLENGTH }} characters
+                            </div>
+                            <div *ngIf="initialPassword?.hasError('maxlength')">Password should contain
+                                at-least {{ PASSWORD_MAXLENGTH }} characters
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mb-2 py-2">{{ LOGIN_LABELS.get_started }}
+                    </button>
                     <button class="btn btn-outline-dark btn w-100 py-2" role="button">
                         <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in"
                              src="/google.png"/>
-                        {{loginLabels.google_single_sign_up}}
+                        {{ LOGIN_LABELS.google_single_sign_up }}
                     </button>
 
                     <div class="text-center mt-4 text-muted small">
-                        {{loginLabels.existing_account}}
+                        {{ LOGIN_LABELS.existing_account }}
 
-                        <a (click)="flipCard()" class="text-primary text-decoration-none fw-medium k-cursor-pointer">
-                            {{loginLabels.sign_in}}
-                        </a>
+                        <a (click)="flipCard();"
+                           class="text-primary text-decoration-none fw-medium k-cursor-pointer">{{ LOGIN_LABELS.sign_in }}</a>
                     </div>
+
                 </form>
             </div>
 
@@ -71,40 +156,61 @@
                             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                         </svg>
                     </div>
-                    <h1 class="fs-2 fw-bold text-dark mb-2">{{loginLabels.welcome_back}}</h1>
-                    <p class="text-muted">{{loginLabels.continue_agile}}</p>
+                    <h1 class="fs-2 fw-bold text-dark mb-2">{{ LOGIN_LABELS.welcome_back }}</h1>
+                    <p class="text-muted">{{ LOGIN_LABELS.continue_agile }}</p>
                 </div>
 
-                <form>
-                    <div class="mb-3">
-                        <label class="form-label text-secondary small fw-medium">{{commonLabels.username}}</label>
-                        <input type="text" class="form-control form-control-lg" placeholder="Enter your username"
-                               required>
+                <form [formGroup]="signInForm" (ngSubmit)="loginUser()" autocomplete="off">
+
+                    <div class="input-group-wrapper">
+                        <label class="form-label text-secondary small fw-medium"
+                               appRequiredAstrix>{{ COMMON_LABELS.username }}</label>
+                        <input type="text" class="form-control form-control-lg"
+                               [class.is-invalid]="userName?.invalid && initialUserName?.dirty"
+                               formControlName="username"
+                               placeholder="Choose a username">
+                        <div class="error-message" *ngIf="userName?.invalid && userName?.dirty">
+                            <div *ngIf="userName?.hasError('required')">Username field is mandatory</div>
+                            <div *ngIf="userName?.hasError('pattern')">Username is invalid. Should contain alphabets or
+                                numbers
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="form-label text-secondary small fw-medium">{{commonLabels.password}}</label>
-                        <input type="password" class="form-control form-control-lg" placeholder="Enter your password"
-                               required>
+                    <div class="input-group-wrapper">
+                        <label class="form-label text-secondary small fw-medium"
+                               appRequiredAstrix>{{ COMMON_LABELS.password }}</label>
+
+                        <div class="password-input">
+                            <input #userPassword type="password"
+                                   formControlName="password"
+                                   class="form-control form-control-lg"
+                                   [class.is-invalid]="password?.invalid && password?.dirty"
+                                   placeholder="Create a strong password">
+                            <span *ngIf="userPassword.type == 'password'" (click)="userPassword.type = 'text'">
+                                     <img width="15px" alt="view password" src="/eye.png"/>
+                            </span>
+                            <span *ngIf="userPassword.type == 'text'" (click)="userPassword.type = 'password'">
+                                <img width="15px" alt="hide password" src="/hidden.png"/>
+                            </span>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 mb-2 py-2">{{loginLabels.sign_in}}</button>
+                    <button type="submit" class="btn btn-primary w-100 mb-2 py-2">{{ LOGIN_LABELS.sign_in }}</button>
                     <button class="btn btn-outline-dark btn w-100 py-2" role="button">
-                        <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="/google.png"/>
-                       {{loginLabels.google_single_sign_in}}
+                        <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in"
+                             src="/google.png"/>
+                        {{ LOGIN_LABELS.google_single_sign_in }}
                     </button>
 
                     <div class="text-center mt-4 text-muted small">
-                        {{loginLabels.new_account}}
-                        <a (click)="flipCard()" class="text-primary text-decoration-none fw-medium k-cursor-pointer">
-                            {{loginLabels.sign_up}}
+                        {{ LOGIN_LABELS.new_account }}
+                        <a (click)="flipCard();" class="text-primary text-decoration-none fw-medium k-cursor-pointer">
+                            {{ LOGIN_LABELS.sign_up }}
                         </a>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
 </div>
-</body>
-</html>

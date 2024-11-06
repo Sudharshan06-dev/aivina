@@ -122,9 +122,18 @@
     font-size: 0.875rem !important;
   }
 
-  .form-control-lg {
-    font-size: 0.875rem;
-    padding: 0.5rem 0.75rem;
+  .form-control-md {
+    font-size: 0.675rem;
+    padding: 0.35rem 0.55rem;
+  }
+
+  .bg-light {
+    background-color: #f8f9fa !important;
+  }
+
+  .form-control:focus {
+    background-color: #f8f9fa;
+    box-shadow: none;
   }
 
   .btn {
@@ -141,15 +150,15 @@
 /* Handle larger screens */
 @media (min-width: 1200px) {
   .flip-container {
-    max-width: 480px;
+    max-width: 550px;
   }
 
   .flipper {
-    min-height: 650px;
+    min-height: 700px;
   }
 
   .front, .back {
-    padding: 2.5rem !important;
+    padding: 1.5rem !important;
   }
 }
 
@@ -182,4 +191,53 @@
 /* Add smooth transitions for responsive changes */
 .front, .back, .logo-icon, .form-control, .btn {
   transition: all 0.3s ease;
+}
+
+.input-group-wrapper {
+  position: relative;
+  margin-bottom: 1.3rem;
+}
+
+.input-group-wrapper:last-of-type {
+  margin-bottom: 2rem;
+}
+
+/*.light-blue-box {
+  background-color: #ffffff; !* White background for a clean look *!
+  border-radius: 8px; !* Rounded corners *!
+  padding: 1rem 1rem 1rem 1rem; !* Padding inside the box *!
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); !* Subtle shadow effect *!
+}*/
+
+
+.password-input {
+  position: relative; /* To position the images */
+}
+
+.password-input img {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 20px;
+  cursor: pointer;
+}
+
+.password-input span {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.password-input input {
+  padding-right: 40px;
+}
+
+.error-message {
+  position: absolute;
+  bottom: -18px;
+  font-size: 0.75rem;
+  color: #dc3545;
+  margin: 0;
 }

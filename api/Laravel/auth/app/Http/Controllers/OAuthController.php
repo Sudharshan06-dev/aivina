@@ -1,19 +1,33 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
+use App\Services\LoginHandlerService;
+use Illuminate\Http\Request;
 class OAuthController extends Controller
 {
-    public function registerUser(Request $request)
+    protected $data;
+    public function __construct(Request $request)
     {
-        Log::info('check here');
-        Log::error($request);
+        $this->data = $request->all();
     }
 
-    public function loginUser()
+    public function postRegisterUser()
     {
+        if(!empty($this->data)) {
+            return LoginHandlerService::getLoginHandlerInstance()->registerUser($this->data);
+        }
 
+        return response(trans('messages.errors.signup_failed'), 422);
     }
+
+    public function postHandleUserLogin()
+    {
+        if(!empty($this->data)) {
+            return LoginHandlerService::getLoginHandlerInstance()->handleUserLogin($this->data);
+        }
+
+        return response(trans('messages.errors.login_failed'), 422);
+    }
+
 }
