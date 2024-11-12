@@ -90,7 +90,7 @@ class ValidationService
 
             Log::error(Auth::attempt(['username' => $user_login_data['username'], 'password' => $user_login_data['password']]));
 
-            if (!(Auth::attempt(['username' => 'Sudharshan06', 'password' => 'Sudharshan@06']))) {
+            if (!(Auth::attempt(['username' => $user_login_data['username'], 'password' => $user_login_data['password']]))) {
                 return ['status' => false, 'message' => trans('messages.errors.username_password_invalid')];
             }
 
@@ -105,9 +105,10 @@ class ValidationService
 
     private function _checkUserExists($field_key, $field_value)
     {
+
         return Users::where([
             $field_key => $field_value,
-            'is_deleted' => config('constant.IS_DELETED_NO')
+            'is_deleted' => config('constants.IS_DELETED_NO')
         ])->exists();
     }
 

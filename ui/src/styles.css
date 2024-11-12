@@ -18,3 +18,7 @@ body {
 .form-control.is-invalid {
   margin-bottom: 0;
 }
+
+.ngx-toastr {
+  width: 375px !important;
+}

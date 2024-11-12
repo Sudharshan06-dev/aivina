@@ -7,7 +7,15 @@
         <title>{{ APP_TITLE }}</title>
     </head>
 
+
     <body>
+
+        <ngx-spinner
+                bdColor="rgba(0, 0, 0, 0.5)"
+                [template]="spinnerTemplate">
+        </ngx-spinner>
+
+
         <router-outlet/>
     </body>
 </html>
