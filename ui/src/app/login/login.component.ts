@@ -1,6 +1,6 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {
-    APP_TITLE,
+    APP_TITLE, AUTH_PREFIX, LARAVEL_PATH,
     LARAVEL_ROUTE,
     PASSWORD_MAXLENGTH,
     PASSWORD_MINLENGTH
@@ -98,6 +98,10 @@ export class LoginComponent {
                 this.toastService.error(err?.error);
             }
         });
+    }
+
+    public redirectToGoogleAuth() {
+        window.location.href = LARAVEL_PATH + AUTH_PREFIX + '/redirect?type=signup';
     }
 
     //flip login card

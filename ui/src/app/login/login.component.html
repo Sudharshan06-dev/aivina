@@ -20,7 +20,7 @@
                 </div>
 
                 <!-- Modified form structure -->
-                <form [formGroup]="signUpForm" (ngSubmit)="createUser()" autocomplete="off">
+                <form [formGroup]="signUpForm" autocomplete="off">
 
                     <div class="input-group-wrapper mb-4">
 
@@ -130,9 +130,9 @@
 
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 mb-2 py-2">{{ LOGIN_LABELS.get_started }}
+                    <button type="submit" (click)="createUser()" class="btn btn-primary w-100 mb-2 py-2">{{ LOGIN_LABELS.get_started }}
                     </button>
-                    <button class="btn btn-outline-dark btn w-100 py-2" role="button">
+                    <button class="btn btn-outline-dark btn w-100 py-2" role="button" (click)="redirectToGoogleAuth()">
                         <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in"
                              src="/google.png"/>
                         {{ LOGIN_LABELS.google_single_sign_up }}
