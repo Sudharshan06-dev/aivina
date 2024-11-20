@@ -70,11 +70,10 @@ class LoginHandlerService
             $user->last_login_at = Carbon::now();
             $user->save();
 
-            $user['access_token'] = $token;
-
             return response()->json([
                 'success' => true,
-                'user_data' => $user,
+                'user_details' => $user,
+                'access_token' => $token
             ]);
 
         } catch (\Throwable $e) {

@@ -1,0 +1,165 @@
+/* Modern Gradient Background with Animation */
+.navbar {
+    background: linear-gradient(90deg, #1e40af, #2563eb);
+    background-size: 400% 400%;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    padding: 0.75rem 0.10rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+}
+
+/* Brand Logo Styling */
+.navbar .navbar-brand {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.navbar .navbar-brand::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #ffffff;
+    transition: width 0.3s ease;
+}
+
+.navbar .navbar-brand:hover::after {
+    width: 100%;
+}
+
+/* Navigation Links */
+.navbar .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+.navbar .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar .nav-link:hover::before {
+    width: 80%;
+}
+
+/* Dropdown Styling */
+.navbar .dropdown-menu {
+    background: rgba(99, 102, 241, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    transform-origin: top;
+    animation: dropdownFade 0.2s ease;
+}
+
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.navbar .dropdown-item {
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.navbar .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    transform: translateX(5px);
+}
+
+/* Search Bar Styling */
+.input-group input {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.625rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Buttons Styling */
+.btn-dark {
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+}
+
+.btn-dark:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btn-dark i {
+    font-size: 1.2rem;
+}
+/* Logo Icon Animation */
+.logo-icon {
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.logo-icon:hover {
+    transform: rotate(5deg) scale(1.1);
+}
+
+.logo-icon svg {
+    fill: #ffffff;
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+    padding-top: 3px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}

@@ -1,12 +1,16 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
-import {APP_TITLE, LARAVEL_ROUTE, PASSWORD_MAXLENGTH, PASSWORD_MINLENGTH} from "../../environment";
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {
+    APP_TITLE, AUTH_ROUTE, AUTH_SSO_PATH,PASSWORD_MAXLENGTH, PASSWORD_MINLENGTH
+} from "../../environment";
 import {RequestService} from "../../services/request.service";
 import {LABELS} from "../utilities/labels";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RequiredAstrixDirective} from "../../directives/required-astrix.directive";
 import {CommonModule} from "@angular/common";
-import {ToastrService} from "ngx-toastr";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {ToasterHelper} from "../../services/toast.service";
+import {LocalStorageHelper} from "../../services/local-storage.service";
+import {SKIP_AUTH_TRUE} from "../../interceptors/auth.interceptor";
 
 @Component({
     selector: 'app-login',
@@ -19,7 +23,7 @@ import {Router} from "@angular/router";
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
 
     //Labels
     protected readonly COMMON_LABELS = LABELS.COMMON;
@@ -36,9 +40,34 @@ export class LoginComponent {
 
     public signInForm !: FormGroup;
 
+
     @ViewChild('flipper') flipperRef !: ElementRef;
 
-    constructor(private request: RequestService, private fb: FormBuilder, private toastService: ToastrService, private route: Router) {
+    ngOnInit() {
+
+        this.route.queryParams.subscribe(params => {
+            if(params['error']) {
+                this.toastService.error({message: params['error'], title: 'Error!'})
+            }
+
+            this.router.navigate([], {
+                queryParams: { error: null }, // Set error to null
+                queryParamsHandling: 'merge', // Merge with other query params
+                replaceUrl: true, // Replace the current URL in the browser history
+            });
+        });
+
+        //Set whole localstorage item to null
+        localStorage.clear();
+    }
+
+    constructor(
+        private request: RequestService,
+        private fb: FormBuilder,
+        private toastService: ToasterHelper,
+        private route: ActivatedRoute,
+        private localStorageService: LocalStorageHelper,
+        private router: Router) {
 
         this.signUpForm = this.fb.group({
             firstname: [null, [Validators.required, Validators.pattern('[a-zA-Z]+'), Validators.maxLength(35)]],
@@ -56,34 +85,39 @@ export class LoginComponent {
 
     public createUser() {
 
-        this.request.post(LARAVEL_ROUTE + '/register-user', this.signUpForm.getRawValue()).subscribe({
+        this.request.post(AUTH_ROUTE + '/register-user', this.signUpForm.getRawValue(), [SKIP_AUTH_TRUE]).subscribe({
             next: (data: any) => {
                 // Handle successful response here
-                this.toastService.success(data.title, data.message);
+                this.toastService.success(data);
                 this.flipCard();
             },
 
             error: (err: any) => {
                 // Handle error response here
-                this.toastService.error(err?.error.title, err?.error.message);
+                this.toastService.error(err?.error);
             }
         });
     }
 
     public loginUser() {
 
-        this.request.post(LARAVEL_ROUTE + '/login-user', this.signInForm.getRawValue()).subscribe({
+        this.request.post(AUTH_ROUTE + '/login-user', this.signInForm.getRawValue(), [SKIP_AUTH_TRUE]).subscribe({
             next: (data: any) => {
                 // Handle successful response here
-                this.route.navigate(['/main-dashboard']);
-                //this.toastService.success(data.title, data.message);
+                this.localStorageService.storeItem('access_token', data?.access_token)
+                this.localStorageService.storeItem('user_details', data?.user_details)
+                this.router.navigate(['/main-dashboard']);
             },
 
             error: (err: any) => {
                 // Handle error response here
-                this.toastService.error(err?.error.title, err?.error.message);
+                this.toastService.error(err?.error);
             }
         });
+    }
+
+    public redirectToGoogleAuth(type: string) {
+        window.location.href = AUTH_SSO_PATH+ '/redirect?type=' + type;
     }
 
     //flip login card

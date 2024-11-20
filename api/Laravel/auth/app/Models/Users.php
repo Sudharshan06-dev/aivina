@@ -27,6 +27,8 @@ class Users extends Authenticatable
         'username',
         'email',
         'password',
+        'google_id',
+        'last_login_at',
         'remember_token',
         'is_active',
         'created_at',

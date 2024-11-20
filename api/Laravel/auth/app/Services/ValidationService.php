@@ -1,10 +1,9 @@
 <?php
 
-namespace app\Services;
+namespace App\Services;
 
 use App\Models\Users;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class ValidationService
@@ -49,11 +48,6 @@ class ValidationService
                 return ['status' => false, 'message' => trans('messages.errors.email_exists')];
             }
 
-            //Username length exceeded
-            if(strlen($user_signup_data['username']) > config('constants.USERNAME_MAX_LENGTH')) {
-                return ['status' => false, 'message' => trans('messages.errors.username_maxlength_exceeded')];
-            }
-
             return ['status' => true];
 
         } catch (\Throwable $exception) {
@@ -90,7 +84,7 @@ class ValidationService
 
             Log::error(Auth::attempt(['username' => $user_login_data['username'], 'password' => $user_login_data['password']]));
 
-            if (!(Auth::attempt(['username' => 'Sudharshan06', 'password' => 'Sudharshan@06']))) {
+            if (!(Auth::attempt(['username' => $user_login_data['username'], 'password' => $user_login_data['password']]))) {
                 return ['status' => false, 'message' => trans('messages.errors.username_password_invalid')];
             }
 
@@ -105,9 +99,10 @@ class ValidationService
 
     private function _checkUserExists($field_key, $field_value)
     {
+
         return Users::where([
             $field_key => $field_value,
-            'is_deleted' => config('constant.IS_DELETED_NO')
+            'is_deleted' => config('constants.IS_DELETED_NO')
         ])->exists();
     }
 

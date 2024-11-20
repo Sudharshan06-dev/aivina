@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\LoginHandlerService;
+use App\Services\SSOFactory;
 use Illuminate\Http\Request;
 class OAuthController extends Controller
 {
@@ -28,6 +29,18 @@ class OAuthController extends Controller
         }
 
         return response(trans('messages.errors.login_failed'), 422);
+    }
+
+    public function handleSsoRedirect(Request $request)
+    {
+        $ssoProvider = SSOFactory::createProvider('google');
+        return $ssoProvider->redirectToProvider($request);
+    }
+
+    public function handleProviderCallback()
+    {
+        $ssoProvider = SSOFactory::createProvider('google');
+        return $ssoProvider->handleProviderCallback();
     }
 
 }
