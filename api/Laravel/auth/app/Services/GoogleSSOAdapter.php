@@ -12,55 +12,126 @@ use Illuminate\Http\Request;
 
 class GoogleSSOAdapter implements SSOProviderInterface
 {
-    private string $login_type;
+    const TYPE_LOGIN = 'login';
+
+    const TYPE_SIGNUP = 'signup';
+
+    private $google_user = null;
+
+    private $user = null;
+
+    private $logging_in_user = null;
 
     public function redirectToProvider(Request $request)
     {
-        $this->login_type = $request->type;
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->with(['state' => $request->type])->redirect();
     }
 
     public function handleProviderCallback()
     {
         try {
 
-            $googleUser = Socialite::driver('google')->user();
+            $this->google_user = Socialite::driver('google')->stateless()->user();
 
             //Get the user details we have
-            $user = Users::where([
-                'email' => $googleUser->getEmail(),
+            $this->user = Users::where([
+                'email' => $this->google_user->getEmail(),
                 'is_deleted' => config('constants.IS_DELETED_NO')
             ])->first();
 
-            //Check for already user signed up
-            /*if($this->login_type == self::TYPE_SIGNUP && $user) {
-                Log::error('GoogleSSOAdapter::handleProviderCallback');
-                return redirect("http://localhost:4200/login?error=Already signedup");
-            }*/
+            // Retrieve the type from the state
+            $loginType = request('state'); // 'login' or 'signup'
 
-            // Find or create user
-            $user = Users::updateOrCreate(
-                ['email' => $googleUser->email],
-                [
-                    'firstname' => $googleUser->offsetGet('given_name'),
-                    'lastname' => $googleUser->offsetGet('family_name'),
-                    'username' => $googleUser->email,
-                    'email' => $googleUser->email,
-                    'last_login_at' => Carbon::now(),
-                    'google_id' => $googleUser->getId()
-                ]
-            );
-
-            // Create token
-            $token = $user->createToken('auth_token')->accessToken;
-
-            // Redirect back to frontend with token
-            return redirect("http://localhost:4200/auth/google/callback?token=" . $token);
+            if($loginType == self::TYPE_LOGIN) {
+                return $this->_loginSSOUser();
+            }
+            elseif ($loginType == self::TYPE_SIGNUP) {
+                return $this->_signUpSSOUser();
+            }
+            else {
+                return redirect("http://localhost:4200/login?error=Invalid authentication type");
+            }
 
         } catch (Exception $e) {
             Log::error('GoogleSSOAdapter::handleProviderCallback');
             Log::error($e);
             return redirect("http://localhost:4200/login?error=Authentication failed");
         }
+    }
+
+    private function _loginSSOUser()
+    {
+        try {
+
+            if(!$this->user) {
+                return redirect("http://localhost:4200/login?error=User does not exist. Signup before logging in");
+            }
+
+            if($this->user->google_id != $this->google_user->getId()) {
+                return redirect("http://localhost:4200/login?error=Login Failed. Check the user valid");
+            }
+
+            //Assign the new user to the current user if valid
+            $this->logging_in_user = $this->user;
+
+            //Update the last login at to the current time
+            $this->user->last_login_at = Carbon::now();
+
+            return redirect("http://localhost:4200/auth/google/callback?token=" . $this->_createTokenForUser());
+
+        } catch (Exception $exception) {
+            Log::error('GoogleSSOAdapter::_loginSSOUser');
+            Log::error($exception);
+            return redirect("http://localhost:4200/login?error=Login failed");
+        }
+    }
+
+    private function _signUpSSOUser()
+    {
+        try {
+
+            //Check if the user already exists
+            if($this->user) {
+                return redirect("http://localhost:4200/login?error=User already exist. Try to login");
+            }
+
+            //Check for all the information that is required is present
+            $transformed_user_data_for_validation = [
+                'firstname' => $this->google_user->offsetGet('given_name'),
+                'lastname' => $this->google_user->offsetGet('family_name'),
+                'username' => $this->google_user->email,
+                'email' => $this->google_user->email,
+                'password' => $this->google_user->getId()
+            ];
+
+            $user_signup_validation = ValidationService::getValidationServiceInstance()->validateSignupFields($transformed_user_data_for_validation);
+
+            if(!$user_signup_validation['status']) {
+                $message = $user_signup_validation['message'];
+                return redirect("http://localhost:4200/login?error=$message");
+            }
+
+            //Create the user in the database
+            $this->logging_in_user = Users::create([
+                'firstname' => $this->google_user->offsetGet('given_name'),
+                'lastname' => $this->google_user->offsetGet('family_name'),
+                'username' => $this->google_user->email,
+                'email' => $this->google_user->email,
+                'last_login_at' => Carbon::now(),
+                'google_id' => $this->google_user->getId()
+            ]);
+
+            return redirect("http://localhost:4200/auth/google/callback?token=" . $this->_createTokenForUser());
+
+        } catch (Exception $exception) {
+            Log::error('GoogleSSOAdapter::_signUpSSOUser');
+            Log::error($exception);
+            return redirect("http://localhost:4200/login?error=Login failed");
+        }
+    }
+
+    private function _createTokenForUser()
+    {
+        return $this->logging_in_user->createToken('auth_token')->accessToken;
     }
 }

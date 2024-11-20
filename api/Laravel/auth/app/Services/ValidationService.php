@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Users;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class ValidationService
@@ -47,11 +46,6 @@ class ValidationService
             //Email already exists
             if(!empty($this->_checkUserExists('email', $user_signup_data['email']))) {
                 return ['status' => false, 'message' => trans('messages.errors.email_exists')];
-            }
-
-            //Username length exceeded
-            if(strlen($user_signup_data['username']) > config('constants.USERNAME_MAX_LENGTH')) {
-                return ['status' => false, 'message' => trans('messages.errors.username_maxlength_exceeded')];
             }
 
             return ['status' => true];

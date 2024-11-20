@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Interfaces\SSOProviderInterface;
 use Mockery\Exception;
+use Illuminate\Http\Request;
 
 class SSOFactory
 {

@@ -1,0 +1,35 @@
+<div class="sidebar" [@sidebarState]="isExpanded ? 'expanded' : 'collapsed'">
+    <div class="sidebar-header">
+        <button class="toggle-btn" (click)="toggleSidebar()">
+            <i class="fas" [class.fa-chevron-right]="!isExpanded" [class.fa-chevron-left]="isExpanded"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-content">
+        <!-- Main Navigation -->
+        <nav>
+            <ng-container *ngFor="let item of menuItems">
+                <a [routerLink]="item.route"
+                   routerLinkActive="active"
+                   class="nav-item"
+                   [class.collapsed]="!isExpanded">
+                    <i class="fas {{item.icon}}"></i>
+                    <span class="label" *ngIf="isExpanded">{{item.label}}</span>
+                </a>
+            </ng-container>
+        </nav>
+
+        <!-- Bottom Section -->
+        <div class="sidebar-footer" *ngIf="isExpanded">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <span class="user-name">John Doe</span>
+                    <span class="user-role">Administrator</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

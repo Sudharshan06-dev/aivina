@@ -15,7 +15,21 @@
                 [template]="spinnerTemplate">
         </ngx-spinner>
 
+        <div class="layout">
+            <app-page-header *ngIf="userAuthenticated" class="header"></app-page-header>
+            <div class="body">
+                <app-sidebar
+                        *ngIf="userAuthenticated"
+                        [isExpanded]="isSidebarExpanded"
+                        (toggleSidebarEvent)="onSidebarToggle($event)"
+                        class="sidebar">
+                </app-sidebar>
+                <div class="content" [ngClass]="{'main-content' : userAuthenticated, 'login-content': !userAuthenticated}">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div>
 
-        <router-outlet/>
     </body>
+
 </html>

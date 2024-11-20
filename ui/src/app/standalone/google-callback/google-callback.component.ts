@@ -22,7 +22,6 @@ export class GoogleCallbackComponent implements OnInit{
         this.router.navigate(['/login'], {
           queryParams: { error: params['error'] }
         })
-
         return;
       }
 

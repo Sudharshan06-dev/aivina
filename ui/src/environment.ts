@@ -6,9 +6,11 @@ export const API_PREFIX : string = 'api/v1';
 
 export const AUTH_PREFIX: string = 'api/auth'
 
-export const LARAVEL_PATH: string = 'http://localhost:8000/'
+export const AUTH_SSO_PATH: string = 'http://localhost:8000/' + AUTH_PREFIX;
 
-export const LARAVEL_ROUTE : string = LARAVEL_PATH + API_PREFIX;
+export const AUTH_ROUTE: string = 'http://localhost:8000/' + API_PREFIX;
+
+export const LARAVEL_ROUTE : string = 'http://localhost:8000/' + API_PREFIX;
 
 export const JAVA_ROUTE : string = 'http://localhost:8001/' + API_PREFIX;
 
