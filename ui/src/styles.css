@@ -1,22 +1,28 @@
+:root {
+    --background-base: #1d2330;
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --text-primary: #e5e7eb;
+}
+
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .required {
-  color: red;
+    color: red;
 }
 
 .form-control.is-invalid {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .ngx-toastr {
-  width: 375px !important;
+    width: 375px !important;
 }

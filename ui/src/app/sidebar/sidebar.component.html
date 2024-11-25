@@ -1,9 +1,12 @@
 <div class="sidebar" [@sidebarState]="isExpanded ? 'expanded' : 'collapsed'">
-    <div class="sidebar-header">
-        <button class="toggle-btn" (click)="toggleSidebar()">
-            <i class="fas" [class.fa-chevron-right]="!isExpanded" [class.fa-chevron-left]="isExpanded"></i>
-        </button>
-    </div>
+
+    <button class="collapse-button" (click)="toggleSidebar()">
+        <img [class.rotate-icon]="!isExpanded"
+             width="20"
+             height="20"
+             alt="toggle sidebar"
+             src="/sidebar.png"/>
+    </button>
 
     <div class="sidebar-content">
         <!-- Main Navigation -->
@@ -18,18 +21,6 @@
                 </a>
             </ng-container>
         </nav>
-
-        <!-- Bottom Section -->
-        <div class="sidebar-footer" *ngIf="isExpanded">
-            <div class="user-info">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-details">
-                    <span class="user-name">John Doe</span>
-                    <span class="user-role">Administrator</span>
-                </div>
-            </div>
-        </div>
     </div>
+
 </div>
