@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Users;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -32,6 +33,8 @@ class LoginHandlerService
                 return response($user_signup_validation['message'], 422);
             }
 
+            DB::connection('meta')->beginTransaction();
+
             //Main functionality
             Users::create([
                 'firstname' => $user_signup_data['firstname'],
@@ -42,10 +45,23 @@ class LoginHandlerService
                 'created_at' => Carbon::now()
             ]);
 
+            $email_content = view('emails.welcome_email')->render();
+
+            $email_sent = NotificationService::getNotificationService()->triggerSqsEmail($user_signup_data['email'], $email_content);
+
+            if(!$email_sent) {
+                Log::critical('LoginHandleService::registerUser');
+                Log::critical('Email not sent, please check the error');
+            }
+
+            DB::connection('meta')->commit();
+
             return response(trans('messages.success.signup_successfully'), 200);
 
         } catch (\Throwable $e) {
+            Log::error('LoginHandleService::registerUser');
             Log::error($e);
+            DB::connection('meta')->rollBack();
             return response(trans('messages.errors.signup_failed'), 422);
         }
     }

@@ -1,23 +1,27 @@
 /* Modern Gradient Background with Animation */
 .navbar {
-    background: linear-gradient(90deg, #1e40af, #2563eb);
-    background-size: 400% 400%;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    padding: 0.75rem 0.10rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.8), rgba(99, 102, 241, 0.8));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    padding: 0.20rem 0 0.20rem 0;
+    box-shadow: none;
 }
 
 @keyframes gradientBG {
-    0% { background-position: 0% 50% }
-    50% { background-position: 100% 50% }
-    100% { background-position: 0% 50% }
+    0% {
+        background-position: 0% 50%
+    }
+    50% {
+        background-position: 100% 50%
+    }
+    100% {
+        background-position: 0% 50%
+    }
 }
 
 /* Brand Logo Styling */
 .navbar .navbar-brand {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: #ffffff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -132,7 +136,7 @@
 .btn-dark {
     background-color: transparent;
     border: none;
-    padding: 0.5rem;
+    padding: 0.25rem;
     color: rgba(255, 255, 255, 0.8);
     transition: all 0.2s ease;
 }
@@ -145,6 +149,7 @@
 .btn-dark i {
     font-size: 1.2rem;
 }
+
 /* Logo Icon Animation */
 .logo-icon {
     position: relative;
@@ -157,8 +162,8 @@
 
 .logo-icon svg {
     fill: #ffffff;
-    width: 32px;
-    height: 32px;
+    width: 25px;
+    height: 25px;
     margin-right: 12px;
     padding-top: 3px;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Interfaces\SSOProviderInterface;
 use App\Models\Users;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 use Mockery\Exception;
@@ -111,6 +112,8 @@ class GoogleSSOAdapter implements SSOProviderInterface
                 return redirect("http://localhost:4200/login?error=$message");
             }
 
+            DB::connection('meta')->beginTransaction();
+
             //Create the user in the database
             $this->logging_in_user = Users::create([
                 'firstname' => $this->google_user->offsetGet('given_name'),
@@ -121,11 +124,23 @@ class GoogleSSOAdapter implements SSOProviderInterface
                 'google_id' => $this->google_user->getId()
             ]);
 
+            $email_content = view('emails.welcome_email')->render();
+
+            $email_sent = NotificationService::getNotificationService()->triggerSqsEmail($this->google_user->email, $email_content);
+
+            if(!$email_sent) {
+                Log::critical('GoogleSSOAdapter::_signUpSSOUser');
+                Log::critical('Email not sent, please check the error');
+            }
+
+            DB::connection('meta')->commit();
+
             return redirect("http://localhost:4200/auth/google/callback?token=" . $this->_createTokenForUser());
 
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             Log::error('GoogleSSOAdapter::_signUpSSOUser');
             Log::error($exception);
+            DB::connection('meta')->rollBack();
             return redirect("http://localhost:4200/login?error=Login failed");
         }
     }
